@@ -17,4 +17,6 @@ public interface CompanyService {
     List<ReservationDto> getAllAdBookings(Long companyId);
     boolean changeBookingStatus(Long bookingId,String status);
     UserDto updateUserProfile(Long userId, UserDto userDto);
+
+    int getClientIdByBookingId(Long bookingId);
 }

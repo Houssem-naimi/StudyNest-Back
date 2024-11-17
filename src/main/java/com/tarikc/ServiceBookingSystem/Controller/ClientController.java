@@ -4,7 +4,9 @@ package com.tarikc.ServiceBookingSystem.Controller;
 import com.tarikc.ServiceBookingSystem.Dto.ReservationDto;
 import com.tarikc.ServiceBookingSystem.Dto.ReviewDto;
 import com.tarikc.ServiceBookingSystem.Dto.UserDto;
+import com.tarikc.ServiceBookingSystem.Enum.ReservationStatus;
 import com.tarikc.ServiceBookingSystem.Services.Client.ClientService;
+import com.tarikc.ServiceBookingSystem.Services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/ads")
     public ResponseEntity<?> getAllAds(){
@@ -26,14 +30,20 @@ public class ClientController {
         return  ResponseEntity.ok(clientService.SearchAdByName(name));
     }
     @PostMapping("/book-service")
-    public ResponseEntity<?> bookService(@RequestBody ReservationDto reservationDto){
+    public ResponseEntity<?> bookService(@RequestBody ReservationDto reservationDto) {
         boolean success = clientService.bookService(reservationDto);
-        if(success){
-            return  ResponseEntity.status(HttpStatus.OK).build();
-        }else{
+        if (success) {
+            // Notify company of new booking
+            notificationService.sendNotification(
+                    reservationDto.getCompanyId(),
+                    "New booking request from client " + reservationDto.getUsername(),
+                    ReservationStatus.PENDING
+            );
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-   }
+    }
    @GetMapping("/ad/{adId}")
    public ResponseEntity<?> getAdDetailsByAdId(@PathVariable Long adId){
         return ResponseEntity.ok(clientService.getAdDetailsByAdId(adId));
@@ -62,6 +72,10 @@ public class ClientController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
+    }
+    @GetMapping("/notifications/{userId}")
+    public ResponseEntity<?> getUserNotifications(@PathVariable Long userId) {
+        return ResponseEntity.ok(notificationService.getUserNotifications(userId));
     }
 
 

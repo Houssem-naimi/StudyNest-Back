@@ -114,4 +114,9 @@ public class CompanyServiceImpl implements  CompanyService{
         return null; // Peut-être lancer une exception ou gérer autrement si l'utilisateur n'est pas trouvé
     }
 
+    @Override
+    public int getClientIdByBookingId(Long bookingId) {
+        return 0;
+    }
+
 }
