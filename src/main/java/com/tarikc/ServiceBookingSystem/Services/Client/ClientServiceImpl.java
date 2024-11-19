@@ -47,17 +47,18 @@ public class ClientServiceImpl implements ClientService {
         if(optionalAd.isPresent() && optionalUser.isPresent()){
             Reservation reservation = new Reservation();
             reservation.setBookDate(reservationDto.getBookDate());
+            reservation.setStartDate(reservationDto.getStartDate());  // Set start date
+            reservation.setEndDate(reservationDto.getEndDate());      // Set end date
             reservation.setReservationStatus(ReservationStatus.PENDING);
             reservation.setUser(optionalUser.get());
-
             reservation.setAd(optionalAd.get());
             reservation.setCompany(optionalAd.get().getUser());
             reservation.setReviewStatus(ReviewStatus.FALSE);
 
             reservationRepository.save(reservation);
-            return  true;
+            return true;
         }
-        return  false;
+        return false;
     }
     public AdDetailsForClientDto getAdDetailsByAdId(Long adId){
         Optional<Ad> optionalAd = adRepository.findById(adId);
@@ -69,9 +70,15 @@ public class ClientServiceImpl implements ClientService {
         }
         return  adDetailsForClientDto;
     }
-    public List<ReservationDto> getAllBookingsByUserId(Long userId){
-        return  reservationRepository.findAllByUserId(userId).stream().map(Reservation::getReservationDto).collect(Collectors.toList());
+
+    public List<ReservationDto> getAllBookingsByUserId(Long userId) {
+        return reservationRepository
+                .findAllByUserId(userId)
+                .stream()
+                .map(Reservation::getReservationDto)
+                .collect(Collectors.toList());
     }
+
 
     public Boolean giveReview(ReviewDto reviewDto) {
         Optional<User> optionalUser = userRepository.findById(reviewDto.getUserId());

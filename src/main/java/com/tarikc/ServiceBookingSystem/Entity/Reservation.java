@@ -13,15 +13,18 @@ import java.util.Date;
 @Entity
 @Data
 public class Reservation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private ReservationStatus reservationStatus;
-
     private ReviewStatus reviewStatus;
-
     private Date bookDate;
+
+    // New fields
+    private Date startDate;
+    private Date endDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id",nullable = false)
@@ -38,19 +41,18 @@ public class Reservation {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Ad ad;
 
-    public ReservationDto getReservationDto(){
+    public ReservationDto getReservationDto() {
         ReservationDto dto = new ReservationDto();
-
         dto.setId(id);
         dto.setServiceName(ad.getServiceName());
         dto.setBookDate(bookDate);
         dto.setReservationStatus(reservationStatus);
         dto.setReviewStatus(reviewStatus);
-
         dto.setAdId(ad.getId());
         dto.setCompanyId(company.getId());
         dto.setUsername(user.getName());
-
+        dto.setStartDate(startDate);
+        dto.setEndDate(endDate);
         return dto;
     }
 }

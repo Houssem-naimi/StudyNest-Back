@@ -8,6 +8,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,23 +17,17 @@ import java.util.Date;
 
 @Data
 public class ReservationDto {
-
     private Long id;
-
     private String serviceName;
-
     private ReservationStatus reservationStatus;
-
     private ReviewStatus reviewStatus;
-
     private Date bookDate;
-
+    private Date startDate;
+    private Date endDate;
     private Long userId;
-
     private String username;
-
     private Long companyId;
-
     private Long adId;
+
 
 }

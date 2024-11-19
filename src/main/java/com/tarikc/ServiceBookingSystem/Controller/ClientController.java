@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {
@@ -49,12 +51,22 @@ public class ClientController {
         return ResponseEntity.ok(clientService.getAdDetailsByAdId(adId));
    }
 
+   //@GetMapping("/my-bookings/{userId}")
+   //public  ResponseEntity<?> getAllBookingsByUserId(@PathVariable Long userId){
+        //return ResponseEntity.ok(clientService.getAllBookingsByUserId(userId));
+   //}
    @GetMapping("/my-bookings/{userId}")
-   public  ResponseEntity<?> getAllBookingsByUserId(@PathVariable Long userId){
-        return ResponseEntity.ok(clientService.getAllBookingsByUserId(userId));
+   public ResponseEntity<?> getAllBookingsByUserId(@PathVariable Long userId) {
+       List<ReservationDto> reservations = clientService.getAllBookingsByUserId(userId);
+       reservations.forEach(reservation -> {
+           System.out.println("Start Date: " + reservation.getStartDate());
+           System.out.println("End Date: " + reservation.getEndDate());
+       });
+       return ResponseEntity.ok(reservations);
    }
 
-   @PostMapping("/review")
+
+    @PostMapping("/review")
    public ResponseEntity<?> giveReview(@RequestBody ReviewDto reviewDto){
         Boolean success = clientService.giveReview(reviewDto);
         if(success){
