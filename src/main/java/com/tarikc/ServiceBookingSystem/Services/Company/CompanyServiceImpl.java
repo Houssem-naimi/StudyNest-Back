@@ -78,8 +78,12 @@ public class CompanyServiceImpl implements  CompanyService{
         }
         return false;
     }
-    public List<ReservationDto> getAllAdBookings(Long companyId){
-        return reservationRepository.findAllByCompanyId(companyId).stream().map(Reservation::getReservationDto).collect(Collectors.toList());
+    public List<ReservationDto> getAllAdBookings(Long companyId) {
+        return reservationRepository
+                .findAllByCompanyId(companyId)
+                .stream()
+                .map(Reservation::getReservationDto)
+                .collect(Collectors.toList());
     }
     public boolean changeBookingStatus(Long bookingId,String status){
         Optional<Reservation> optionalReservation = reservationRepository.findById(bookingId);

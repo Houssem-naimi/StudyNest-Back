@@ -40,7 +40,6 @@ public class Reservation {
     @JoinColumn(name = "ad_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Ad ad;
-
     public ReservationDto getReservationDto() {
         ReservationDto dto = new ReservationDto();
         dto.setId(id);
@@ -55,4 +54,5 @@ public class Reservation {
         dto.setEndDate(endDate);
         return dto;
     }
+
 }

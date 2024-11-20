@@ -68,11 +68,13 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
     @GetMapping("/bookings/{companyId}")
     public ResponseEntity<List<ReservationDto>> getAllAdBookings(@PathVariable Long companyId) {
-        return ResponseEntity.ok(companyService.getAllAdBookings(companyId));
+        List<ReservationDto> reservations = companyService.getAllAdBookings(companyId);
+        reservations.forEach(reservation -> System.out.println(reservation)); // Log des données
+        return ResponseEntity.ok(reservations);
     }
+
 
     @GetMapping("/booking/{bookingId}/{status}")
     public ResponseEntity<?> changeBookingStatus(@PathVariable Long bookingId, @PathVariable String status) {
