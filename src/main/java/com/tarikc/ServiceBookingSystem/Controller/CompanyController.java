@@ -77,21 +77,10 @@ public class CompanyController {
 
 
     @GetMapping("/booking/{bookingId}/{status}")
-    public ResponseEntity<?> changeBookingStatus(@PathVariable Long bookingId, @PathVariable String status) {
-        boolean success = companyService.changeBookingStatus(bookingId, status);
-        if (success) {
-            Long clientId = (long) companyService.getClientIdByBookingId(bookingId);
-            if (clientId != null) {
-                ReservationStatus reservationStatus = ReservationStatus.valueOf(status.toUpperCase());
-                notificationService.sendNotification(
-                        clientId,
-                        "Your booking has been " + status.toLowerCase() + " by the company.",
-                        reservationStatus
-                );
-            }
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<?> changeBookingStatus(@PathVariable Long bookingId, @PathVariable String status){
+        boolean success = companyService.changeBookingStatus(bookingId,status);
+        if(success) return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/update-profile/{userId}")
